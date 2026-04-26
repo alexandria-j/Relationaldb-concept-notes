@@ -1,6 +1,28 @@
 # Relationaldb-concept-notes
 My master study guide and reference notes for Relational Databases.
-(learning markdown to do this as well lol) 
+(learning Markdown to do this as well lol) 
+
+---
+
+## Table of Contents
+* [1. Code Editors vs. IDEs](#1-code-editors-vs-ides)
+* [2. Workspaces & CLI Basics](#2-workspaces--cli-basics)
+* [3. Essential VS Code Shortcuts](#3-essential-vs-code-shortcuts)
+* [4. Recommended VS Code Extensions](#4-recommended-vs-code-extensions)
+* [5. Terminal vs. Command Line vs. Shell](#5-terminal-vs-command-line-vs-shell)
+* [6. Essential Terminal Shortcuts](#6-essential-terminal-shortcuts)
+* [7. Basic Bash Commands (File Navigation & Creation)](#7-basic-bash-commands-file-navigation--creation)
+* [8. Command Options & Flags](#8-command-options--flags)
+* [9. Relational vs. Non-Relational Databases](#9-relational-vs-non-relational-databases)
+* [10. Common Relational Databases](#10-common-relational-databases)
+* [11. Core SQL & Database Setup](#11-core-sql--database-setup)
+* [12. Essential SQL Data Types](#12-essential-sql-data-types)
+* [13. Inserting & Querying Data](#13-inserting--querying-data)
+* [14. Primary & Foreign Keys](#14-primary--foreign-keys)
+* [15. Database Relationships](#15-database-relationships)
+* [16. SQL JOIN Operations](#16-sql-join-operations)
+
+---
 
 ## 1. Code Editors vs. IDEs
 
