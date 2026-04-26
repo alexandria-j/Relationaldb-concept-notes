@@ -119,3 +119,133 @@ Typically a single hyphen followed by a single letter. Values are separated by a
 Typically two hyphens followed by a full word. Values are attached using an equals sign (`=`).
 * Example: `ls --all`
 * Example with a value: `ls --width=50`
+
+---
+
+## 9. Relational vs. Non-Relational Databases
+
+* **Relational Databases:** Store data in structured tables (rows and columns). They require a strict **schema** (a defined structure of tables, columns and data types) and enforce data integrity through relationships.
+* **Non-Relational Databases (NoSQL):** Store data in flexible, unconnected files or documents. They do not require a rigid schema, allowing fields to be added or removed on the fly.
+
+---
+
+## 10. Common Relational Databases
+
+* **PostgreSQL:** Advanced, open-source, object-relational database known for high reliability, data integrity and custom data types.
+* **MySQL:** Extremely popular, open-source database heavily used in web development.
+* **SQLite:** Lightweight, serverless, file-based database that requires zero initial configuration.
+
+---
+
+## 11. Core SQL & Database Setup
+
+SQL (Structured Query Language) commands typically end with a semicolon (`;`). Standard naming convention for tables and columns is `snake_case`.
+
+**Connecting via Terminal**
+* `psql -U <username> -d <database_name>` : Connect to a specific database.
+* `\c <database_name>` : Switch to a different database while already inside the psql shell (No semicolon needed for `\` commands).
+
+**Creating Databases & Tables**
+Eg.
+    CREATE DATABASE my_database;
+
+    CREATE TABLE products (
+      id SERIAL,
+      name VARCHAR(255)
+    );
+
+---
+
+## 12. Essential SQL Data Types
+
+**Numeric**
+* `INTEGER` : Standard whole number.
+* `SERIAL` : Automatically increments by 1 for each new row (essential for creating unique IDs in PostgreSQL).
+
+**Text / String**
+* `VARCHAR(n)` : Variable-length string with a maximum character limit of `n`.
+* `TEXT` : Strings of any length.
+
+**Date & Time**
+* `DATE` : Stores the calendar date.
+* `TIME` : Stores the time of day.
+* `TIMESTAMP` : Stores both date and time (Use `TIMESTAMP WITH TIME ZONE` for global data).
+
+**Boolean**
+* `BOOLEAN` : Stores `TRUE` or `FALSE`.
+
+---
+
+## 13. Inserting & Querying Data
+
+**Example Setup:** A `dogs` table with `id`, `name`, and `age`.
+
+**Inserting Data**
+It is safest to explicitly state the column names so values are assigned correctly.
+
+    INSERT INTO dogs (name, age) 
+    VALUES 
+      ('Gino', 3),
+      ('Nora', 2);
+
+**Querying Data (SELECT & WHERE)**
+* `SELECT * FROM dogs;` : Retrieves all columns and all rows.
+* `SELECT name, age FROM dogs;` : Retrieves only specific columns.
+* `SELECT * FROM dogs WHERE age < 3;` : Filters for dogs younger than 3.
+* `SELECT age FROM dogs WHERE name = 'Gino';` : Retrieves only Gino's age.
+
+---
+
+## 14. Primary & Foreign Keys
+
+Keys enforce data integrity and create relationships between tables.
+
+* **Primary Key:** Uniquely identifies a row. Cannot be `NULL` or duplicated. (e.g., `customer_id`).
+* **Composite Primary Key:** A combination of two or more columns to create a unique identifier (e.g., `student_id` + `course_id` ensures a student isn't enrolled in the exact same class twice).
+* **Foreign Key:** A column in one table that references the Primary Key of another table.
+
+**Visual Example:**
+Linking a customer to their specific order.
+
+    CREATE TABLE orders (
+      order_id SERIAL PRIMARY KEY,
+      customer_id INTEGER,
+      FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+    );
+
+---
+
+## 15. Database Relationships
+
+* **One-to-One:** Record A links to exactly one Record B.
+  * *Example:* One `employee` is assigned exactly one `company_vehicle`.
+* **One-to-Many / Many-to-One:** Record A links to multiple Record Bs.
+  * *Example:* One `customer` can have many `orders`.
+* **Many-to-Many:** Multiple records in Table A link to multiple records in Table B.
+  * *Example:* An `author` writes multiple `books`, and a `book` can have multiple `authors`.
+  * *How to solve:* You must create a **Junction Table** (e.g., `books_authors`) holding the IDs (Foreign Keys) from both tables to bridge the gap.
+* **Self-Referencing (Recursive):** A record relates to another record in the exact same table.
+  * *Example:* An `employees` table where an employee has a `manager_id` that links back to a different employee in the same table.
+
+---
+
+## 16. SQL JOIN Operations
+
+JOINs allow you to combine data from multiple tables. 
+
+**The Setup:**
+Table A: `products` (1: Ice Cream, 2: Pizza, 4: T-Shirt)
+Table B: `sales` (Product 1 was sold, Product 2 was sold)
+
+* **INNER JOIN:** Returns only rows with a match in *both* tables.
+  * *Visual Result:* Shows Ice Cream and Pizza. (T-Shirt is excluded because it wasn't sold).
+* **FULL OUTER JOIN:** Returns all rows from *both* tables.
+  * *Visual Result:* Shows Ice Cream, Pizza, and T-Shirt. (T-Shirt's "sale date" column will just be `NULL`).
+* **LEFT JOIN:** Returns all rows from the *left* table (`products`), plus matched rows from the right (`sales`).
+* **RIGHT JOIN:** Returns all rows from the *right* table (`sales`), plus matched rows from the left (`products`).
+
+**Basic JOIN Syntax:**
+
+    SELECT * FROM products 
+    INNER JOIN sales 
+      ON products.product_id = sales.product_id;
