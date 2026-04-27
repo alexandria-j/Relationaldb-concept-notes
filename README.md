@@ -21,6 +21,7 @@ My master study guide and reference notes for Relational Databases.
 * [14. Primary & Foreign Keys](#14-primary--foreign-keys)
 * [15. Database Relationships](#15-database-relationships)
 * [16. SQL JOIN Operations](#16-sql-join-operations)
+* [17. Bash Scripting Fundamentals](#17-bash-scripting-fundamentals) 
 
 ---
 
@@ -272,3 +273,35 @@ Table B: `sales` (Product 1 was sold, Product 2 was sold)
     SELECT * FROM products 
     INNER JOIN sales 
       ON products.product_id = sales.product_id;
+
+---
+
+## 17. Bash Scripting Fundamentals
+
+Bash scripting involves writing a sequence of terminal commands in a file that can be executed automatically as a single script.
+
+**Advantages of Bash Scripting**
+* **No Setup Required:** Bash is pre-installed on nearly every Unix environment (no need to configure Node.js or Python runtimes).
+* **System Access:** You have immediate, built-in access to all binary applications installed on the system.
+* **Terminal Testable:** Any syntax written in a Bash script can be copied and pasted directly into the command line to test it instantly.
+
+### Anatomy of a Bash Script
+A script typically starts with a "shebang" and executes commands sequentially, often using loops, arrays and variables.
+
+    #!/bin/bash
+    servers=("prod" "dev")
+    
+    for server in "${servers[@]}"
+    do
+      echo "Pulling $server"
+      rsync --archive --verbose $server:/etc/nginx/conf.d/server.conf configs/$server.conf
+    done
+
+**Syntax Breakdown:**
+* `#!/bin/bash` : The **Shebang**. This must be the absolute first line of the file. It tells the system which interpreter to use to run the script.
+* `servers=("prod" "dev")` : Creates an array (list) of strings.
+* `for server in "${servers[@]}"` : Initiates a loop. The `[@]` syntax expands the array so the loop iterates through every single item.
+* `do ... done` : The logical block of the loop. Everything inside here runs once per item.
+* `$server` : **Variable Interpolation**. Adding the `$` sign injects the current value of the variable into the command.
+
+---
