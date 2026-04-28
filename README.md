@@ -21,7 +21,10 @@ My master study guide and reference notes for Relational Databases.
 * [14. Primary & Foreign Keys](#14-primary--foreign-keys)
 * [15. Database Relationships](#15-database-relationships)
 * [16. SQL JOIN Operations](#16-sql-join-operations)
-* [17. Bash Scripting Fundamentals](#17-bash-scripting-fundamentals) 
+* [17. Bash Scripting Fundamentals](#17-bash-scripting-fundamentals)
+* [18. Database Normalisation](#18-database-normalisation)
+* [19. Security: SQL Injection](#19-security-sql-injection)
+* [20. Performance: The N+1 Problem](#20-performance-the-n+1-problem)
 
 ---
 
@@ -305,3 +308,69 @@ A script typically starts with a "shebang" and executes commands sequentially, o
 * `$server` : **Variable Interpolation**. Adding the `$` sign injects the current value of the variable into the command.
 
 ---
+
+## 18. Database Normalisation
+
+Normalisation is the process of organizing a relational database to reduce data redundancy and improve data integrity by dividing data into smaller linked tables.
+
+**Key Terminology:**
+* **Superkey:** Any set of columns that uniquely identifies a row.
+* **Candidate Key:** A superkey with the *minimum* number of columns necessary to uniquely identify a row.
+
+**The Normal Forms (With Examples):**
+
+* **First Normal Form (1NF):** * Values must be atomic (one value per cell).
+  * *Example:* If a student has two phone numbers, do not store them as `555-0100, 555-0101` in a single cell. Create a separate `phone_numbers` table.
+
+* **Second Normal Form (2NF):**
+  * Must be in 1NF.
+  * **Rule:** No Partial Dependencies. Non-key attributes must depend on the *entire* primary key.
+  * *Visual Example:* An `orders` table with a composite primary key (`order_id` + `item_id`).
+    * **Bad:** Storing `order_shipping_city` in this table. The city only depends on the `order_id`, not the specific `item_id`.
+    * **Fixed (2NF):** Split into two tables: `order_header` (holding the ID, date, and city) and `order_items` (holding the ID, item, and quantity).
+
+* **Third Normal Form (3NF):**
+  * Must be in 2NF.
+  * **Rule:** No Transitive Dependencies. A non-key attribute cannot depend on another non-key attribute.
+  * *Visual Example:* * **Bad:** `order_id` -> `customer_id` -> `customer_city` -> `city_postal_code`. 
+    * The zip code relies on the city, not the order. If the city's zip code changes, you'd have to update hundreds of order rows.
+    * **Fixed (3NF):** Split into three separate tables: `Orders`, `Customers`, and `Cities`.
+
+---
+
+## 19. Security: SQL Injection
+
+**SQL Injection** is a critical vulnerability where attackers input malicious SQL code into web forms or URLs to manipulate your database.
+
+**Visual Example:**
+Imagine an app that authenticates users by directly concatenating their input into the query:
+`SELECT * FROM users WHERE username = ' + input + '`
+
+If an attacker types this into the username box: `" " OR "1"="1" --`
+The database reads it as: `WHERE username = " " OR TRUE`
+*(Because 1 always equals 1, the database returns TRUE and logs the attacker in without a password. The `--` comments out the rest of your security checks!)*
+
+**Prevention Best Practices:**
+1. **Parameterized Queries:** Never use string concatenation for user input. This separates the SQL structure from the data so it cannot be executed.
+2. **Principle of Least Privilege:** Never connect your web app using a database Admin account.
+
+---
+
+## 20. Performance: The N+1 Problem
+
+The **N+1 Problem** is a severe performance bottleneck caused by making multiple database queries inside a loop instead of grabbing all necessary data at once. 
+
+**Visual Example: The Food Delivery App**
+You need to load the 50 most recent orders, plus the names of the customers who placed them.
+
+**The Bad Way (N+1):**
+1. You make **1** query to get the list of 50 orders.
+2. You loop through those orders, making **N** (50) separate queries to look up each customer.
+```javascript
+for (const order of orders) {
+  // This hits the database 50 individual times!
+  const customerData = await getCustomerData(order.customer_id); 
+}
+
+**The Solution:**
+Avoid loops entirely, use SQL join operations to combine the tables and fetch all 50 orders AND their related customer data in one trip.
