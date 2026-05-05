@@ -25,6 +25,7 @@ My master study guide and reference notes for Relational Databases.
 * [18. Database Normalisation](#18-database-normalisation)
 * [19. Security: SQL Injection](#19-security-sql-injection)
 * [20. Performance: The N+1 Problem](#20-performance-the-n+1-problem)
+* [21. CLI Text Editing: Working with Nano](#21-cli-text-editing-working-with-nano)
 
 ---
 
@@ -374,3 +375,34 @@ for (const order of orders) {
 
 **The Solution:**
 Avoid loops entirely, use SQL join operations to combine the tables and fetch all 50 orders AND their related customer data in one trip.
+
+---
+
+## 21. CLI Text Editing: Working with Nano
+
+When working on a remote server or in the terminal, graphical text editors aren't always available. **Nano** is a streamlined, user-friendly CLI text editor (compared to the steep learning curve of Vim or the heavy shortcut reliance of Emacs). While it lacks the extensibility of Vim, it is perfect for quick, immediate edits.
+
+**Opening a file:**
+`nano <filename>`
+
+**The Nano Interface:**
+* **Top:** Displays the Nano version and current file name.
+* **Middle:** The file content (navigate using arrow keys).
+* **Bottom:** The shortcut menu. 
+  * A caret (`^`) means hold the **Ctrl** key.
+  * An `M-` means hold the **Meta** key (usually the **Alt** key).
+
+**Essential Nano Shortcuts:**
+* `Ctrl + O` (`^O`): **Write Out** (Save). It will prompt for a file name—press `Enter` to confirm or `Ctrl + C` to cancel.
+* `Ctrl + X` (`^X`): **Exit**. If you have unsaved changes, it will prompt you: press `Y` to save or `N` to discard.
+* `Ctrl + K` (`^K`): **Cut** the current line (often used to quickly delete whole line).
+* `Ctrl + U` (`^U`): **Uncut** (Paste) the text you just cut.
+* `Ctrl + W` (`^W`): **Where is** (Search the document for specific word).
+
+**The Standard Git Commit Flow in Nano:**
+Git often defaults to Nano if you run `git commit` without an inline message. 
+1. Type your commit message at the top of the file.
+2. Press `Ctrl + O`, then `Enter` to save the message.
+3. Press `Ctrl + X` to exit Nano. Git will automatically complete the commit.
+
+---
