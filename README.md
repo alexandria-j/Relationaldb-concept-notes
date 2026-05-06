@@ -362,25 +362,25 @@ The database reads it as: `WHERE username = " " OR TRUE`
 The **N+1 Problem** is a severe performance bottleneck caused by making multiple database queries inside a loop instead of grabbing all necessary data at once. 
 
 **Visual Example: The Food Delivery App**
-You need to load the 50 most recent orders, plus the names of the customers who placed them.
+You need to load the 50 most recent orders plus the names of the customers who placed them.
 
 **The Bad Way (N+1):**
 1. You make **1** query to get the list of 50 orders.
 2. You loop through those orders, making **N** (50) separate queries to look up each customer.
-```javascript
-for (const order of orders) {
-  // This hits the database 50 individual times!
-  const customerData = await getCustomerData(order.customer_id); 
-}
+
+    for (const order of orders) {
+      // This hits the database 50 individual times!
+      const customerData = await getCustomerData(order.customer_id); 
+    }
 
 **The Solution:**
-Avoid loops entirely, use SQL join operations to combine the tables and fetch all 50 orders AND their related customer data in one trip.
+Avoid loops entirely. Use an SQL **`JOIN`** operation to combine the tables and fetch all 50 orders AND their related customer data in one single, highly efficient trip to the database.
 
 ---
 
 ## 21. CLI Text Editing: Working with Nano
 
-When working on a remote server or in the terminal, graphical text editors aren't always available. **Nano** is a streamlined, user-friendly CLI text editor (compared to the steep learning curve of Vim or the heavy shortcut reliance of Emacs). While it lacks the extensibility of Vim, it is perfect for quick, immediate edits.
+When working on a remote server or in the terminal, graphical text editors aren't always available. **Nano** is a streamlined user-friendly CLI text editor (compared to the steep learning curve of Vim or the heavy shortcut reliance of Emacs). While it lacks the extensibility of Vim, it is perfect for quick and immediate edits.
 
 **Opening a file:**
 `nano <filename>`
@@ -395,9 +395,9 @@ When working on a remote server or in the terminal, graphical text editors aren'
 **Essential Nano Shortcuts:**
 * `Ctrl + O` (`^O`): **Write Out** (Save). It will prompt for a file name—press `Enter` to confirm or `Ctrl + C` to cancel.
 * `Ctrl + X` (`^X`): **Exit**. If you have unsaved changes, it will prompt you: press `Y` to save or `N` to discard.
-* `Ctrl + K` (`^K`): **Cut** the current line (often used to quickly delete whole line).
+* `Ctrl + K` (`^K`): **Cut** the current line (often used to quickly delete a whole line).
 * `Ctrl + U` (`^U`): **Uncut** (Paste) the text you just cut.
-* `Ctrl + W` (`^W`): **Where is** (Search the document for specific word).
+* `Ctrl + W` (`^W`): **Where is** (Search the document for a specific word).
 
 **The Standard Git Commit Flow in Nano:**
 Git often defaults to Nano if you run `git commit` without an inline message. 
